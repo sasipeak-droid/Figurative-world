@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>FIGURATIVE WORLD</title><link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden;background:#120a2e;font-family:'Mali','Noto Sans Thai',Tahoma,sans-serif;color:#fff;touch-action:none;user-select:none}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+.scr{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center;background:radial-gradient(circle at 50% 20%,#c4b5fdf0,#818cf8f2);overflow:auto;z-index:5}.scr.on{display:flex}
+.scr>*{max-width:560px;width:100%}
+h1{margin:0;font-size:clamp(26px,7vw,46px);color:#fff;text-shadow:0 3px 0 #7c3aed,0 6px 12px #4c1d9566;line-height:1.25}
+h2{margin:0;font-size:clamp(20px,5vw,28px)}p{margin:0;line-height:1.55}
+button,input{font:inherit;font-weight:700;color:#fff;border:0;border-radius:14px;padding:12px 18px;min-height:48px;background:linear-gradient(135deg,#f472b6,#a78bfa);border:3px solid #fff;border-radius:999px;box-shadow:0 5px 0 #7c3aed88;cursor:pointer}
+button:active{transform:scale(.97)}button:disabled{opacity:.45;cursor:not-allowed}
+input{background:#fff;color:#7c3aed;text-align:center;cursor:text;width:100%}
+.card{background:#ffffffe8;color:#4c1d95;border:3px solid #fff;border-radius:24px;padding:14px;text-align:left;box-shadow:0 6px 0 #7c3aed55}
+.g5{display:grid;gap:8px}.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+#hud{position:fixed;top:0;left:0;right:0;display:none;gap:8px;padding:calc(8px + env(safe-area-inset-top,0px)) 10px 8px;z-index:3;align-items:center;flex-wrap:wrap;font-size:14px;font-weight:700;pointer-events:none}
+body.ing #hud{display:flex}#hud span{background:#7c3aedcc;border:2px solid #fff;border-radius:999px;padding:5px 10px}
+#hud button{pointer-events:auto;min-height:36px;padding:4px 10px}
+#bar{flex:1 1 100%;height:8px;background:#0008;border-radius:8px;overflow:hidden}#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#14b8a6,#facc15);transition:width .5s}
+#ctl{display:none;position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:18px;right:18px;justify-content:space-between;align-items:flex-end;z-index:3;pointer-events:none}
+@media(pointer:coarse){body.play #ctl{display:flex}}
+#joy{width:130px;height:130px;border-radius:50%;background:#ffffff22;border:2px solid #fff6;position:relative;pointer-events:auto;touch-action:none}
+#kn{position:absolute;left:40px;top:40px;width:50px;height:50px;border-radius:50%;background:#fffc}
+#jb{width:84px;height:84px;border-radius:50%;pointer-events:auto;font-size:15px}
+#snd{position:fixed;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:9;min-height:44px;padding:8px 12px}
+body.play #snd{bottom:auto;top:calc(52px + env(safe-area-inset-top,0px))}
+.opt{text-align:left;background:linear-gradient(135deg,#fff,#fce7f3);color:#4c1d95;border:3px solid #f9a8d4;border-radius:22px;width:100%}
+.opt.ok{background:linear-gradient(135deg,#bbf7d0,#fde68a);border-color:#4ade80;color:#14532d}.opt.no{background:#fecdd3;border-color:#fb7185;color:#9f1239}
+.hint{position:fixed;bottom:calc(150px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:14px;z-index:2;pointer-events:none;display:none}body.play .hint{display:block}
+@media(pointer:fine){.hint{bottom:20px}}
+#ch{background:linear-gradient(transparent 30%,#a78bfaf5 70%);justify-content:flex-end;pointer-events:none}#ch>*{pointer-events:auto}#chp{max-height:54vh;overflow:auto;text-align:center}.sw{width:38px;height:38px;min-height:38px;padding:0;border-radius:50%;border:3px solid #fff4}.sw.on{border-color:#fff;transform:scale(1.15)}.cr{display:flex;align-items:center;gap:6px;justify-content:center;flex-wrap:wrap;margin:6px 0}.cr b{min-width:70px;font-size:14px}.cr button.on{outline:3px solid #facc15}
+.scr{text-shadow:0 1px 3px #4c1d95aa}.card,.card *{text-shadow:none}.card h2{color:#7c3aed}.card button{text-shadow:0 1px 2px #4c1d9588}.opt{text-shadow:none!important}
+</style></head><body>
+<div id="hud"><span>⭐ <b id="sc">0</b></span><span>💎 <b id="gm">0</b></span><span id="wl"></span><span id="qn"></span><button id="pz">☰ ด่าน</button><div id="bar"><i></i></div></div>
+<div class="hint" id="hint"></div>
+<div id="ctl"><div id="joy"><div id="kn"></div></div><button id="jb">กระโดด</button></div>
+<button id="snd">🔊</button>
+
+<div class="scr on" id="menu"><h1>✨ FIGURATIVE WORLD ✨</h1><h2>ภารกิจพิชิตโลกแห่งภาพพจน์</h2><p>พลังแห่งภาษาหายไปจากโลก! สำรวจ 5 ดินแดน ไขภาพพจน์ในเนื้อเพลงสไตล์ใหม่ แล้วช่วยคืนพลังให้ถ้อยคำ</p>
+<input id="nick" maxlength="14" placeholder="ชื่อเล่น (ไม่ใส่ก็ได้)" autocomplete="off">
+<button id="go">▶ เริ่มผจญภัย</button><button id="hw">วิธีเล่น</button><button id="lo">เป้าหมายการเรียนรู้</button></div>
+<div class="scr" id="how"><h2>วิธีเล่น</h2><div class="card"><p>🖥 คอมพิวเตอร์: WASD / ลูกศร เดิน • Space กระโดด • คลิกเลือกคำตอบ<br>📱 มือถือ/แท็บเล็ต: จอยสติ๊กซ้ายล่าง • ปุ่มกระโดดขวาล่าง • แตะเลือกคำตอบ<br>💎 เดินเข้าใกล้คริสตัลเรืองแสงเพื่อรับโจทย์ ด่านละ 4 ข้อ ตอบผิดไม่เสียแต้มและมีคำอธิบายเสมอ<br>🏆 ตอบถูกข้อละ 4 แต้ม + โบนัสผ่านด่าน 4 แต้ม รวมเต็ม 100 แต้ม<br>🔒 ไม่มีบัญชี ไม่เก็บข้อมูลส่วนตัว ไม่มีโฆษณา</p></div><button class="bk">← กลับ</button></div>
+<div class="scr" id="learn"><h2>เป้าหมายการเรียนรู้</h2><div class="card"><p>1 ป่าแห่งอุปมา: อุปมา (เหมือน ดุจ ราวกับ ประหนึ่ง)<br>2 อาณาจักรอุปลักษณ์: เปรียบตรง ๆ ไม่มีคำเปรียบ<br>3 หุบเขาจินตนาการ: บุคลาธิษฐาน อติพจน์ อวพจน์<br>4 นครปริศนา: สัญลักษณ์ นามนัย สัทพจน์<br>5 ดินแดนตำนาน: ปฏิพากย์ ภาพพจน์ผสม และการตีความจากบริบท<br><small>เนื้อเพลงทุกท่อนแต่งขึ้นใหม่ ไม่ได้อ้างอิงเพลงหรือศิลปินจริง</small></p></div><button class="bk">← กลับ</button></div>
+<div class="scr" id="ws"><h2>เลือกดินแดน</h2><div class="g5" id="wb"></div><button id="cb">🎨 เลือก/แต่งตัวละคร</button><button class="bk">← เมนู</button></div>
+<div class="scr" id="ch"><div class="card" id="chp"></div></div>
+<div class="scr" id="qz"><div class="card"><small id="qt"></small><p id="qx" style="font-size:clamp(18px,4.6vw,24px);font-weight:700;margin:8px 0"></p></div><div class="g5" id="op"></div><div class="card" id="fb" style="display:none"><p id="fm" style="font-weight:800"></p><p id="fe"></p><div class="row" style="margin-top:10px"><button id="nx">ต่อไป ▶</button></div></div></div>
+<div class="scr" id="wd"><h1 id="wt"></h1><p id="ws2" style="font-size:20px"></p><p id="wr"></p><button id="wn"></button></div>
+<div class="scr" id="rs"><h1>ภารกิจสำเร็จ! 🎉</h1><h2 id="rk"></h2><p id="rn" style="font-size:42px;font-weight:800;color:#fff;text-shadow:0 3px 0 #7c3aed"></p><p id="rd"></p><p id="ra"></p><button id="rp">🔁 เล่นอีกครั้ง</button></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const N={A:'อุปมา',B:'อุปลักษณ์',C:'บุคลาธิษฐาน',D:'อติพจน์',E:'อวพจน์',F:'สัญลักษณ์',G:'นามนัย',H:'สัทพจน์',I:'ปฏิพากย์',J:'อุปลักษณ์ + บุคลาธิษฐาน',K:'อุปมา + อติพจน์',L:'สัญลักษณ์ + นามนัย'};
+const WN=['ป่าแห่งอุปมา','อาณาจักรแห่งอุปลักษณ์','หุบเขาแห่งจินตนาการ','นครปริศนาแห่งภาษา','ดินแดนตำนานบทสุดท้าย'];
+const BD=['นักอุปมา','ราชาอุปลักษณ์','นักฝันแห่งหุบเขา','ผู้ไขปริศนา','ตำนานภาพพจน์'];
+const AC=['🌸 มงกุฎดอกไม้','👑 มงกุฎทอง','🪄 คทาจินตนาการ','🔮 ลูกแก้วโบราณ','🏆 ถ้วยจอมปราชญ์'];
+const C=[{s:0x7dd3fc,g:0x86efac,a:0xfef08a},{s:0xa5b4fc,g:0xfde68a,a:0xfbcfe8},{s:0xf0abfc,g:0xfbcfe8,a:0x99f6e4},{s:0xfdba74,g:0xfcd9a8,a:0xfef3c7},{s:0xc4b5fd,g:0xa5b4fc,a:0xfbcfe8}];
+const Q=[
+["ข้อใดเป็นอุปมา","รอยยิ้มเธอสดใสราวกับแสงตะวัน",["รอยยิ้มเธอคือแสงตะวันของฉัน","ตะวันยิ้มให้ฉันทุกเช้า","ยิ้มของเธอสว่างไปทั่วจักรวาล"],"“ราวกับ” เป็นคำเปรียบ จึงเป็นอุปมา ข้อ ‘คือแสงตะวัน’ เป็นอุปลักษณ์ ‘ตะวันยิ้ม’ เป็นบุคลาธิษฐาน ‘ทั่วจักรวาล’ เป็นอติพจน์"],
+["‘ความรักของเรามั่นคงดุจภูผา แม้ลมแรงก็ไม่หวั่น’ ข้อใดวิเคราะห์ถูกต้อง","เปรียบความรักกับภูเขา โดยใช้คำว่า “ดุจ”",["เปรียบลมกับภูเขา โดยใช้คำว่า “ดุจ”","ภูผาเป็นสัญลักษณ์แทนความรักโดยไม่มีการเปรียบ","กล่าวเกินจริงว่าความรักใหญ่เท่าภูเขา"],"สิ่งที่ถูกเปรียบคือ ‘ความรัก’ กับ ‘ภูผา’ มีคำ ‘ดุจ’ เชื่อม จึงเป็นอุปมา"],
+["ข้อใดไม่ใช่อุปมา","เวลาคือสายน้ำที่ไม่หวนคืน",["เธอสวยราวกับนางฟ้า","ใจฉันหนักอึ้งเหมือนก้อนหิน","เขาวิ่งเร็วประหนึ่งสายลม"],"ข้อที่ถูกคือเปรียบตรง ๆ ว่า ‘คือ’ สายน้ำ ไม่มีคำเปรียบ จึงเป็นอุปลักษณ์ ส่วนข้ออื่นมี ราวกับ เหมือน ประหนึ่ง"],
+["‘ใจฉันเต้นแรงเหมือนกลองที่ถูกตีรัว’ สิ่งที่นำมาเปรียบกันคือข้อใด","ใจที่เต้นแรง กับ กลองที่ถูกตีรัว",["ฉัน กับ กลอง","กลอง กับ เสียงเพลง","ใจ กับ ความเหงา"],"อุปมาต้องระบุทั้งสิ่งที่เปรียบและสิ่งที่นำมาเปรียบ คือ ใจเต้นแรง กับ กลองถูกตีรัว"],
+["ข้อใดเป็นอุปลักษณ์","โลกใบนี้คือเวทีที่เราต้องเล่นให้เต็มที่",["โลกนี้กว้างใหญ่ดุจมหาสมุทร","โลกทั้งใบยิ้มรับเมื่อฉันกลับบ้าน","ฉันเหนื่อยจนแทบแบกโลกไม่ไหว"],"เปรียบโลกเป็นเวทีโดยตรง ไม่มีคำเปรียบ ข้อแรกเป็นอุปมา ข้อสองบุคลาธิษฐาน ข้อสามอติพจน์"],
+["‘เธอคือเข็มทิศในวันที่ฉันหลงทาง’ เข็มทิศสื่อความหมายตามข้อใด","ผู้ชี้ทางให้ชีวิต",["ของขวัญราคาแพง","ความสับสนวุ่นวาย","ความเร็วของเวลา"],"เปรียบเธอเป็นเข็มทิศ เพราะเข็มทิศบอกทิศทาง จึงสื่อว่าเธอคือผู้นำทางให้ชีวิต"],
+["ข้อใดมีภาพพจน์ต่างจากข้ออื่น","ฝันของเธอสูงเหมือนฟ้า",["ความหวังคือประภาคารกลางพายุ","ครูคือแสงสว่างของศิษย์","ความจริงคือกระจกที่ไม่เคยโกหก"],"ข้อแรกใช้คำ ‘เหมือน’ เป็นอุปมา ส่วนข้ออื่นเปรียบตรง ๆ เป็นอุปลักษณ์"],
+["‘หัวใจฉันคือบ้านหลังเล็กที่มีเธออยู่คนเดียว’ ข้อใดวิเคราะห์ถูก","อุปลักษณ์ เพราะเปรียบหัวใจเป็นบ้านโดยตรง",["อุปมา เพราะมีคำว่า ‘คือ’ เป็นคำเปรียบ","บุคลาธิษฐาน เพราะหัวใจมีคนอาศัย","สัญลักษณ์ เพราะบ้านแทนความรักโดยไม่มีการเปรียบ"],"‘คือ’ ไม่ใช่คำเปรียบแบบอุปมา (เหมือน ดุจ ราวกับ) การบอกว่าหัวใจเป็นบ้านจึงเป็นอุปลักษณ์"],
+["ข้อใดเป็นบุคลาธิษฐาน","ท้องฟ้าร้องไห้ให้กับคนอกหัก",["ฟ้าสีเทาเหมือนใจฉัน","น้ำตาไหลเป็นสายธาร","ฟ้าคือผืนผ้าสีเทา"],"ฟ้าไม่ใช่คนแต่ ‘ร้องไห้’ ได้ จึงเป็นบุคลาธิษฐาน ข้ออื่นเป็นอุปมา อติพจน์ และอุปลักษณ์ตามลำดับ"],
+["ข้อใดเป็นอติพจน์","รอเธอจนดาวบนฟ้าแก่เฒ่า",["ฉันรอเธออยู่ที่เดิมทุกวัน","การรอคอยคือโซ่ตรวน","นาฬิกากระซิบว่าเธอไม่มา"],"ดาวไม่แก่เฒ่าจริง เป็นการกล่าวเกินจริงเพื่อเน้นเวลารอที่ยาวนาน จึงเป็นอติพจน์"],
+["ผู้ชนะเหรียญทองพูดว่า ‘ก็แค่โชคช่วยนิดหน่อยเอง’ ข้อใดวิเคราะห์ถูก","อวพจน์ เพราะกล่าวลดความสำคัญให้น้อยกว่าความจริง",["อติพจน์ เพราะกล่าวเกินความจริง","บุคลาธิษฐาน เพราะทำให้โชคมีชีวิต","อุปลักษณ์ เพราะเปรียบโชคเป็นเหรียญ"],"ความสำเร็จเกิดจากความพยายามมาก แต่กล่าวว่าเป็นเพียงนิดหน่อย จึงเป็นอวพจน์ ซึ่งตรงข้ามกับอติพจน์"],
+["‘ดอกไม้หัวเราะเมื่อเธอเดินผ่าน ฉันแทบหยุดหายใจเป็นร้อยปี’ มีภาพพจน์ใด","บุคลาธิษฐานและอติพจน์",["อุปมาและอุปลักษณ์","อวพจน์และสัญลักษณ์","นามนัยและสัทพจน์"],"ดอกไม้หัวเราะ = บุคลาธิษฐาน ส่วนหยุดหายใจร้อยปี = อติพจน์"],
+["ข้อใดใช้สัญลักษณ์","เธอมอบช่อมะลิให้แม่ในวันแม่",["ทำเนียบประกาศมาตรการใหม่","ตึกตักตึกตักหัวใจฉัน","ชีวิตคือการเดินทาง"],"ดอกมะลิเป็นสัญลักษณ์แทนความรักและความเคารพต่อแม่ ‘ทำเนียบ’ เป็นนามนัย ‘ตึกตัก’ เป็นสัทพจน์ ‘ชีวิตคือการเดินทาง’ เป็นอุปลักษณ์"],
+["ข้อใดเป็นนามนัย","ปากกาย่อมคมกว่าดาบ",["ความรู้คือแสงสว่างนำทาง","ตัวหนังสือเต้นระบำบนกระดาษ","คำพูดของเธอเจ็บราวกับมีด"],"ปากกาแทนการใช้ปัญญาและการเขียน ดาบแทนกำลังอาวุธ จึงเป็นนามนัย"],
+["‘ฟ้าครืนครั่น ลมหวีดหวิว ใจฉันตุบตับ’ คำใดไม่ใช่สัทพจน์","ฟ้า",["ครืนครั่น","หวีดหวิว","ตุบตับ"],"ครืนครั่น หวีดหวิว ตุบตับ เลียนเสียง ส่วน ‘ฟ้า’ เป็นคำบอกสิ่งธรรมดา"],
+["‘ฉันเป็นนกฟินิกซ์ ลุกขึ้นจากเถ้าถ่านของความผิดหวัง’ นกฟินิกซ์เป็นสัญลักษณ์ของอะไร","การเกิดใหม่และลุกขึ้นสู้",["ความเร็วสูงสุด","ความเหงาที่ยาวนาน","ความร่ำรวย"],"ตำนานนกฟินิกซ์คือเกิดใหม่จากเถ้าถ่าน จึงสื่อถึงการลุกขึ้นสู้ใหม่หลังล้มเหลว"],
+["ข้อใดเป็นปฏิพากย์","ฉันยิ้มทั้งน้ำตาในวันที่เธอจากไป",["ฉันร้องไห้จนน้ำตาท่วมห้อง","น้ำตาคือสายฝนในใจ","น้ำตาไหลรินเหมือนสายฝน"],"ยิ้มกับน้ำตาขัดแย้งกันแต่สื่อความรู้สึกผสม จึงเป็นปฏิพากย์ ข้ออื่นเป็นอติพจน์ อุปลักษณ์ อุปมา"],
+["‘ความหวังคือดาวดวงเล็กที่กระซิบบอกว่าอย่าถอย’ มีภาพพจน์ใด","อุปลักษณ์และบุคลาธิษฐาน",["อุปมาและอติพจน์","อวพจน์และนามนัย","สัญลักษณ์และสัทพจน์"],"ความหวังคือดาว = อุปลักษณ์ ดาวกระซิบ = บุคลาธิษฐาน"],
+["‘ฉันเป็นนกในกรงทอง ใคร ๆ ก็ว่าโชคดี แต่ใจอยากโบยบิน’ ‘กรงทอง’ ในบริบทนี้สื่อความหมายใด","ชีวิตสุขสบายแต่ถูกจำกัดอิสรภาพ",["ความร่ำรวยที่น่าภูมิใจ","บ้านที่อบอุ่นที่สุด","ความกลัวการเดินทาง"],"ทองสื่อความสุขสบาย กรงสื่อการถูกขัง และประโยค ‘แต่ใจอยากโบยบิน’ ยืนยันว่าขาดอิสระ"],
+["บอสสุดท้าย! ‘เราเคยเป็นเมล็ดพันธุ์ใต้ดินมืด วันนี้ฟ้ากว้างยิ้มรับ ฉันบานเต็มที่กลางแสงแดด’ ภาพพจน์ใดปรากฏชัด","อุปลักษณ์ (ฉันคือเมล็ดพันธุ์/ดอกไม้) และบุคลาธิษฐาน (ฟ้ายิ้ม)",["อุปมาและสัทพจน์","อติพจน์และนามนัย","ปฏิพากย์และอวพจน์"],"เปรียบตนเป็นเมล็ดพันธุ์ที่เติบโต โดยไม่มีคำเปรียบ และให้ฟ้ากว้างยิ้มรับเหมือนคน"]];
+
+let st,mode='menu',cur,sc,cam,ren,grp,pl,hats=[],orbs=[],fx=[],bobs=[],keys={},joy={x:0,y:0},vy=0,clk,mute=false,AX;
+function reset(){st={w:0,un:0,score:0,gems:0,xp:0,ok:0,bad:0,ans:[],cw:[0,0,0,0,0],badges:[],t0:Date.now(),name:''};clearHats()}
+reset();
+function show(id){document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));if(id)$(id).classList.add('on');document.body.classList.toggle('play',!id);document.body.classList.toggle('ing',!!id&&id!=='menu'&&id!=='how'&&id!=='learn'&&id!=='ch'||!id)}
+function answered(){return st.ans.filter(Boolean).length}
+function hud(){$('sc').textContent=st.score;$('gm').textContent=st.gems;$('wl').textContent='ด่าน '+(st.w+1)+'/5';$('qn').textContent='ข้อ '+Math.min(answered()+1,20)+'/20';document.querySelector('#bar i').style.width=answered()*5+'%'}
+/* audio */
+function tone(f,d,ty,v,t){if(mute||!AX)return;try{const o=AX.createOscillator(),g=AX.createGain(),n=AX.currentTime+(t||0);o.type=ty||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||.12,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g);g.connect(AX.destination);o.start(n);o.stop(n+d)}catch(e){}}
+function sfx(k){const s={ok:[523,659,784,1047],no:[330,262],win:[392,523,659,784,1047,1319],pick:[880,1175]}[k];s.forEach((f,i)=>tone(f,.25,k=='no'?'triangle':'sine',.15,i*.11))}
+function initAudio(){if(AX)return;try{AX=new(window.AudioContext||window.webkitAudioContext)();const sc=[262,294,330,392,440,523,440,392];let i=0;setInterval(()=>{if(mode=='play'||mode=='quiz'||mode=='menu')tone(sc[i++%8]*(i%16<8?1:.75),.9,'sine',.035)},520)}catch(e){AX=null}}
+$('snd').onclick=()=>{initAudio();mute=!mute;$('snd').textContent=mute?'🔇':'🔊'};
+/* 3D */
+function init3D(){try{ren=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});ren.toneMapping=THREE.ACESFilmicToneMapping;ren.toneMappingExposure=1.15;ren.outputEncoding=THREE.sRGBEncoding;ren.shadowMap.enabled=true;ren.shadowMap.type=THREE.PCFSoftShadowMap;ren.setPixelRatio(Math.min(devicePixelRatio,1.5));document.body.prepend(ren.domElement);sc=new THREE.Scene();cam=new THREE.PerspectiveCamera(60,1,.1,150);
+sc.add(new THREE.HemisphereLight(0xbfd4ff,0x442266,.9));const d=new THREE.DirectionalLight(0xffffff,.8);d.position.set(10,20,8);d.castShadow=true;d.shadow.mapSize.set(1024,1024);const S=d.shadow.camera;S.left=S.bottom=-30;S.right=S.top=30;S.far=80;d.shadow.bias=-.0005;sc.add(d);
+pl=new THREE.Group();const M=(g,c)=>new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:c,roughness:.5}));
+const b=M(new THREE.CylinderGeometry(.4,.5,1.1,12),0x3b82f6);b.position.y=.65;const h=M(new THREE.SphereGeometry(.4,16,12),0xfde0c8);h.position.y=1.6;
+const sf=M(new THREE.TorusGeometry(.38,.1,8,16),0xf472b6);sf.rotation.x=Math.PI/2;sf.position.y=1.2;
+[-.14,.14].forEach(x=>{const e=M(new THREE.SphereGeometry(.05,8,8),0x111111);e.position.set(x,1.65,.36);pl.add(e)});pl.add(b,h,sf);sc.add(pl);hero();clk=new THREE.Clock();onresize=rs;rs();ren.setAnimationLoop(loop)}catch(e){ren=null;console.warn('3D unavailable',e)}}
+function rs(){if(!ren)return;ren.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+function clearHats(){if(pl)hero()}
+function addHat(w){hero()}
+const P=[{n:'แมวเวทมนตร์',skin:0xffe4d0,hair:0xf9a8d4,outfit:0xfbcfe8,cape:0xc4b5fd,gem:0xf472b6,st:2,wp:0,hd:4},{n:'กระต่ายนักรบ',skin:0xffe4d0,hair:0xffffff,outfit:0x93c5fd,cape:0xfda4af,gem:0x7dd3fc,st:1,wp:1,hd:5},{n:'หมีอัศวิน',skin:0xe0b48a,hair:0xb45309,outfit:0xfcd34d,cape:0xf87171,gem:0xfbbf24,st:1,wp:3,hd:1},{n:'พลธนูมินต์',skin:0xffe4d0,hair:0x6ee7b7,outfit:0x86efac,cape:0x5eead4,gem:0x34d399,st:0,wp:2,hd:3},{n:'จอมเวทย์ดารา',skin:0xfde0c8,hair:0xe9d5ff,outfit:0xa78bfa,cape:0x7c3aed,gem:0xfde047,st:2,wp:0,hd:2}];
+const CF=Object.assign({},P[0]);
+let GT,FF,SP,SPF=[],face=1,lx=0,lz=0;const SW=2.6,SH=3.58;
+function drawChar(fr){const cv=document.createElement('canvas');cv.width=512;cv.height=704;const g=cv.getContext('2d');g.scale(2,2);g.translate(0,32);
+const X=c=>'#'+c.toString(16).padStart(6,'0'),D=(c,f)=>'rgb('+[16,8,0].map(q=>Math.min(255,(c>>q&255)*f)|0)+')',K='#5b2a6e';g.lineJoin=g.lineCap='round';g.lineWidth=5;g.strokeStyle=K;
+const B=(d,f)=>{const p=new Path2D(d);g.fillStyle=f;g.fill(p);g.stroke(p)},E=(x,y,rx,ry,f,st)=>{g.beginPath();g.ellipse(x,y,rx,ry,0,0,6.283);g.fillStyle=f;g.fill();if(st)g.stroke()};
+const L=(a,b,c,d,w,col)=>{g.beginPath();g.moveTo(a,b);g.lineTo(c,d);g.lineWidth=w+5;g.strokeStyle=K;g.stroke();g.lineWidth=w;g.strokeStyle=col;g.stroke();g.lineWidth=5;g.strokeStyle=K};
+const O=CF.outfit,sk=X(CF.skin),hr=X(CF.hair),gm=X(CF.gem),cp=X(CF.cape),ly=fr?-8:0,ry=fr?0:-8,sw=fr?8:-8,W=CF.wp,hd=CF.hd;
+if(hd==4){B('M62 62 L52 6 L106 42 Z',hr);B('M194 62 L204 6 L150 42 Z',hr);B('M68 48 L64 24 L88 40 Z','#fda4af');B('M188 48 L192 24 L168 40 Z','#fda4af')}
+if(hd==5){B('M84 52 Q56 -18 84 -26 Q112 -22 108 52 Z',hr);B('M172 52 Q200 -18 172 -26 Q144 -22 148 52 Z',hr);B('M90 44 Q72 -4 88 -12 Q102 -8 102 44 Z','#fda4af');B('M166 44 Q184 -4 168 -12 Q154 -8 154 44 Z','#fda4af')}
+B('M72 172 Q42 240 '+(52+sw)+' 288 Q128 304 '+(204+sw)+' 288 Q214 240 184 172 Z',cp);
+const leg=(x,y)=>B('M'+(x-14)+' 248 L'+(x-14)+' '+(282+y)+' Q'+(x-16)+' '+(296+y)+' '+(x-28)+' '+(298+y)+' L'+(x+18)+' '+(298+y)+' Q'+(x+16)+' '+(290+y)+' '+(x+14)+' '+(282+y)+' L'+(x+14)+' 248 Z',D(O,.7));leg(104,ly);leg(152,ry);
+if(CF.st==2)B('M44 100 Q26 200 58 252 L92 204 L164 204 L198 252 Q230 200 212 100 Z',hr);
+if(W==0){L(190,296,192,70,6,'#d97706');B('M192 36 L212 62 L192 92 L172 62 Z',gm);E(186,56,4,6,'#fff')}
+else if(W==1){B('M180 240 L178 96 L190 66 L202 96 L200 240 Z','#f1f5f9');g.fillStyle=gm;g.fillRect(188,100,4,110);B('M164 232 L216 232 L216 246 L164 246 Z','#fcd34d')}
+else if(W==2){L(196,96,196,262,2,'#fff');g.beginPath();g.moveTo(196,96);g.quadraticCurveTo(262,170,196,262);g.lineWidth=15;g.strokeStyle=K;g.stroke();g.lineWidth=7;g.strokeStyle='#d97706';g.stroke();g.lineWidth=5;g.strokeStyle=K}
+else{L(190,296,190,120,6,'#d97706');B('M160 84 H220 V130 H160 Z','#fcd34d');B('M160 100 H220 V112 H160 Z',gm)}
+B('M88 168 Q74 215 82 256 Q128 272 174 256 Q182 215 168 168 Q128 152 88 168 Z',X(O));
+g.fillStyle='rgba(255,255,255,.4)';g.beginPath();g.ellipse(106,204,8,22,.2,0,6.283);g.fill();
+B('M83 234 Q128 248 173 234 L174 247 Q128 262 82 247 Z','#fcd34d');E(128,247,7,6,gm,1);B('M128 224 C106 206 112 188 128 199 C144 188 150 206 128 224 Z',gm);
+B('M90 176 Q60 198 66 232 Q80 240 94 230 Q94 208 104 192 Z',X(O));B('M166 176 Q196 198 190 232 Q176 240 162 230 Q162 208 152 192 Z',X(O));E(72,236,11,11,sk,1);E(184,236,11,11,sk,1);
+if(W==3){B('M24 196 H96 V240 Q96 274 60 290 Q24 274 24 240 Z',X(O));E(60,238,13,13,gm,1);E(72,236,11,11,sk,1)}
+if(CF.st==0)B('M80 52 L88 8 L110 40 L128 0 L146 40 L168 8 L176 52 Z',hr);if(CF.st==1)E(128,22,26,24,hr,1);
+B('M48 104 Q48 28 128 28 Q208 28 208 104 Q208 172 128 174 Q48 172 48 104 Z',sk);
+B('M48 104 Q42 26 128 24 Q214 26 208 104 Q192 62 162 72 Q142 80 128 62 Q112 82 92 72 Q64 64 48 104 Z',hr);
+if(hd==1){B('M50 96 Q54 36 128 34 Q202 36 206 96 Q128 72 50 96 Z','#cbd5e1');B('M58 72 Q18 62 20 18 Q50 28 70 56 Z','#fde68a');B('M198 72 Q238 62 236 18 Q206 28 186 56 Z','#fde68a')}
+else if(hd==2){g.beginPath();g.ellipse(128,10,46,11,0,0,6.283);g.lineWidth=13;g.strokeStyle=K;g.stroke();g.lineWidth=6;g.strokeStyle='#fde047';g.stroke();g.lineWidth=5;g.strokeStyle=K}
+else if(hd==3)B('M38 124 Q28 26 128 20 Q228 26 218 124 Q206 74 128 70 Q50 74 38 124 Z',D(O,.85));
+E(98,118,13,17,'#3b1d5a');E(158,118,13,17,'#3b1d5a');E(93,111,5,5,'#fff');E(103,125,2.6,2.6,'#fff');E(153,111,5,5,'#fff');E(163,125,2.6,2.6,'#fff');
+E(78,142,14,8,'rgba(251,113,133,.55)');E(178,142,14,8,'rgba(251,113,133,.55)');
+g.lineWidth=4;g.beginPath();g.moveTo(116,144);g.quadraticCurveTo(128,158,140,144);g.stroke();
+g.font='26px sans-serif';g.fillStyle='#fbbf24';for(let i=0;i<st.badges.length;i++)g.fillText('★',6+i*22,60);return cv}
+function hero(){pl.clear();const cv=document.createElement('canvas');cv.width=cv.height=64;const g=cv.getContext('2d'),gd=g.createRadialGradient(32,32,0,32,32,32);gd.addColorStop(0,'#fff');gd.addColorStop(.3,'rgba(255,255,255,.35)');gd.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gd;g.fillRect(0,0,64,64);GT=new THREE.CanvasTexture(cv);
+SPF=[0,1].map(f=>{const t=new THREE.CanvasTexture(drawChar(f));t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;t.encoding=THREE.sRGBEncoding;return t});
+SP=new THREE.Sprite(new THREE.SpriteMaterial({map:SPF[0],transparent:true,fog:false,toneMapped:false,alphaTest:.05}));SP.center.set(.5,.04);SP.scale.set(face*SW,SH,1);pl.add(SP);
+const sh=new THREE.Mesh(new THREE.CircleGeometry(.85,24),new THREE.MeshBasicMaterial({color:0x4c1d95,transparent:true,opacity:.22,depthWrite:false}));sh.rotation.x=-Math.PI/2;sh.position.y=.03;pl.add(sh);
+const rg=new THREE.Mesh(new THREE.RingGeometry(.95,1.15,28),new THREE.MeshBasicMaterial({color:CF.gem,transparent:true,opacity:.6,depthWrite:false}));rg.rotation.x=-Math.PI/2;rg.position.y=.04;pl.add(rg)}
+function walk(t,dt){if(!SP||!dt)return;const dx=pl.position.x-lx,v=Math.hypot(dx,pl.position.z-lz)/dt;if(Math.abs(dx)>.002)face=dx>0?1:-1;if(mode=='cust')face=Math.sin(t*.9)>0?1:-1;lx=pl.position.x;lz=pl.position.z;const k=Math.min(v/7,1);SP.material.map=k>.2&&((t*8|0)%2)?SPF[1]:SPF[0];SP.position.y=Math.abs(Math.sin(t*12))*.15*k;SP.material.rotation=Math.sin(t*12)*.08*k;SP.scale.set(face*SW,SH*(1+Math.sin(t*3)*.015*(1-k)),1)}
+function build(w){if(!ren)return;if(grp)sc.remove(grp);grp=new THREE.Group();sc.add(grp);orbs=[];bobs=[];const c=C[w];sc.background=new THREE.Color(c.s);sc.fog=new THREE.Fog(new THREE.Color(c.a).multiplyScalar(.9),30,95);
+grp.add(new THREE.Mesh(new THREE.SphereGeometry(90,24,12),new THREE.ShaderMaterial({side:THREE.BackSide,fog:false,depthWrite:false,uniforms:{a:{value:new THREE.Color(c.s)},b:{value:new THREE.Color(c.a)}},vertexShader:'varying float y;void main(){y=normalize(position).y;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'uniform vec3 a,b;varying float y;void main(){gl_FragColor=vec4(mix(b,a,smoothstep(-.1,.7,y)),1.);}'})));
+const M=(g,col,em)=>{const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:col,emissive:em||0,emissiveIntensity:.7,roughness:.6}));m.castShadow=m.receiveShadow=true;grp.add(m);return m};
+const gr=M(new THREE.CircleGeometry(32,40),c.g);gr.rotation.x=-Math.PI/2;gr.castShadow=false;const rg=M(new THREE.RingGeometry(10,12,48),c.a,c.a);rg.rotation.x=-Math.PI/2;rg.position.y=.03;rg.castShadow=false;rg.material.transparent=true;rg.material.opacity=.4;
+for(let i=0;i<32;i++){const a=i*2.399,r=7+(i*37)%18,x=Math.cos(a)*r,z=Math.sin(a)*r,col=new THREE.Color().setHSL((i*.13)%1,.8,.76);let m;
+if(w==0){m=M(new THREE.CylinderGeometry(.3,.4,2,6),0xc08457);m.position.set(x,1,z);const t=M(new THREE.SphereGeometry(1.7,14,12),col.getHex(),col.clone().multiplyScalar(.3).getHex());t.position.set(x,3.2,z);if(i%2){const f=M(new THREE.SphereGeometry(.3,8,8),0xf472b6,0xf472b6);f.position.set(x+1.5,.3,z)}}
+else if(w==1){m=M(new THREE.CylinderGeometry(2.4,1.2,1.2,8),0xfde68a,0x3b3000);m.position.set(x,2+(i%4),z);bobs.push([m,m.position.y,i]);const t=M(new THREE.ConeGeometry(.9,2.4,6),0xc4b5fd,0x5b4b8a);t.position.set(x,m.position.y+1.8,z);bobs.push([t,t.position.y,i])}
+else if(w==2){const s=M(new THREE.CylinderGeometry(.08,.1,2.5,6),0x22c55e);s.position.set(x,1.25,z);m=M(new THREE.SphereGeometry(.9,12,10),col.getHex(),col.getHex());m.position.set(x,3,z);bobs.push([m,3,i])}
+else if(w==3){m=M(new THREE.BoxGeometry(1,5,1),0xd6b98c);m.position.set(x,2.5,z);const t=M(new THREE.TorusGeometry(.9,.1,8,20),0x2dd4bf,0x2dd4bf);t.position.set(x,5.5,z);bobs.push([t,5.5,i])}
+else{m=M(new THREE.ConeGeometry(1.2,7,6),0xa78bfa,0x7c3aed);m.position.set(x,3.5,z);const t=M(new THREE.OctahedronGeometry(.5),0xf472b6,0xf472b6);t.position.set(x,8.5,z);bobs.push([t,8.5,i])}}
+const sp=[];for(let i=0;i<300;i++){const a=Math.random()*6.28,b=Math.random()*1.4,r=50;sp.push(Math.cos(a)*Math.cos(b)*r,Math.sin(b)*r*.8+4,Math.sin(a)*Math.cos(b)*r)}
+const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));grp.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:.5,fog:false})));
+for(let k=0;k<4;k++){if(st.ans[w*4+k])continue;const boss=w==4&&k==3,a=Math.PI/4+k*Math.PI/2,o=M(new THREE.IcosahedronGeometry(boss?1.3:.7,0),boss?0xfacc15:c.a,boss?0xfacc15:c.a);o.position.set(Math.cos(a)*11,boss?2.2:1.5,Math.sin(a)*11);const ring=M(new THREE.TorusGeometry(boss?2:1.1,.07,8,24),0xffffff,0xffffff);ring.rotation.x=Math.PI/2;ring.position.set(o.position.x,.1,o.position.z);const hl=new THREE.Sprite(new THREE.SpriteMaterial({map:GT,color:boss?0xfacc15:c.a,blending:THREE.AdditiveBlending,depthWrite:false,fog:false}));hl.scale.setScalar(boss?8:4.5);o.add(hl);o.add(new THREE.PointLight(boss?0xfacc15:c.a,1.4,13));orbs.push({m:o,k,y:o.position.y,ring})}
+for(let i=0;i<10;i++){const a=i*.63,r=30+i%3*8,y=14+i%4*3;for(let k=0;k<3;k++){const q=new THREE.Mesh(new THREE.SphereGeometry(2.2-k*.4,10,8),new THREE.MeshBasicMaterial({color:0xffffff,fog:false}));q.position.set(Math.cos(a)*r+k*2.2,y+(k==1?.8:0),Math.sin(a)*r);grp.add(q)}}
+const fp=[];for(let i=0;i<140;i++){const a=Math.random()*6.28,r=3+Math.random()*26;fp.push(Math.cos(a)*r,.5+Math.random()*6,Math.sin(a)*r)}const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.Float32BufferAttribute(fp,3));FF=new THREE.Points(fg,new THREE.PointsMaterial({map:GT,color:0xfff3a0,size:.8,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true}));grp.add(FF);
+pl.position.set(0,0,0)}
+function burst(p,col){if(!ren)return;for(let i=0;i<16;i++){const m=new THREE.Mesh(new THREE.SphereGeometry(.12,6,6),new THREE.MeshBasicMaterial({color:col,transparent:true}));m.position.copy(p);sc.add(m);const a=i/16*6.28;fx.push({m,v:new THREE.Vector3(Math.cos(a)*4,3+Math.random()*3,Math.sin(a)*4),l:1})}}
+function loop(){const dt=Math.min(clk.getDelta(),.05),t=clk.elapsedTime;
+if(mode=='play'){let x=(keys.d||keys.ArrowRight?1:0)-(keys.a||keys.ArrowLeft?1:0)+joy.x,z=(keys.s||keys.ArrowDown?1:0)-(keys.w||keys.ArrowUp?1:0)+joy.y;const l=Math.hypot(x,z);if(l>.1){if(l>1){x/=l;z/=l}pl.position.x+=x*7*dt;pl.position.z+=z*7*dt;pl.rotation.y=Math.atan2(x,z);const r=Math.hypot(pl.position.x,pl.position.z);if(r>27){pl.position.x*=27/r;pl.position.z*=27/r}}
+if(keys[' ']&&pl.position.y<=0&&vy==0)vy=8;vy-=22*dt;pl.position.y=Math.max(0,pl.position.y+vy*dt);if(pl.position.y==0)vy=0;
+for(const o of orbs)if(Math.hypot(o.m.position.x-pl.position.x,o.m.position.z-pl.position.z)<(o.k==3&&st.w==4?2.4:1.7)){sfx('pick');openQ(o.k);break}}
+if(FF){FF.rotation.y+=dt*.05;FF.position.y=Math.sin(t)*.3}walk(t,dt);for(const o of orbs){o.m.rotation.y+=dt*1.5;o.m.position.y=o.y+Math.sin(t*2+o.k)*.25}
+for(const b of bobs)b[0].position.y=b[1]+Math.sin(t+b[2])*.4;
+for(let i=fx.length-1;i>=0;i--){const f=fx[i];f.l-=dt;f.v.y-=9*dt;f.m.position.addScaledVector(f.v,dt);f.m.material.opacity=Math.max(f.l,0);if(f.l<=0){sc.remove(f.m);fx.splice(i,1)}}
+if(mode=='cust'){pl.rotation.y+=dt*.7;cam.position.lerp(new THREE.Vector3(0,2.2,innerWidth<innerHeight?10.5:7.5),.1);cam.lookAt(0,-.2,0)}else{const tg=new THREE.Vector3(pl.position.x*.9,9,pl.position.z*.9+11);cam.position.lerp(tg,.08);cam.lookAt(pl.position.x,1,pl.position.z)}ren.render(sc,cam)}
+/* game flow */
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function worlds(){const g=$('wb');g.innerHTML='';WN.forEach((n,i)=>{const done=st.cw[i]>=0&&[0,1,2,3].every(k=>st.ans[i*4+k]),b=document.createElement('button');b.disabled=i>st.un||done;b.textContent=(i>st.un?'🔒 ':done?'✅ ':'🌍 ')+(i+1)+'. '+n+(done?' '+'⭐'.repeat(st.cw[i]):'');b.onclick=()=>startWorld(i);g.appendChild(b)});show('ws')}
+function startWorld(w){initAudio();st.w=w;build(w);mode='play';show(null);hud();$('hint').textContent=ren?'เดินไปหาคริสตัลเรืองแสงเพื่อรับโจทย์ ✨':'';$('nxs').style.display=ren?'none':''}
+function openQ(k){const i=st.w*4+k,q=Q[i];cur={i,k,q};mode='quiz';joy={x:0,y:0};$('kn').style.transform='';
+$('qt').textContent='ข้อ '+(i+1)+' • '+WN[st.w];$('qx').textContent=q[0];$('fb').style.display='none';
+const o=$('op');o.innerHTML='';shuf([q[1],...q[2]]).forEach(c=>{const b=document.createElement('button');b.className='opt';b.textContent=c;b.dataset.c=c;b.onclick=()=>pick(c);o.appendChild(b)});show('qz')}
+function pick(c){const q=cur.q,ok=c==q[1];document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.dataset.c==q[1])b.classList.add('ok');else if(b.dataset.c==c)b.classList.add('no')});
+st.ans[cur.i]=true;
+if(ok){st.ok++;st.cw[st.w]++;st.score+=4;st.gems++;st.xp+=10;sfx('ok');$('fm').textContent='✨ ยอดเยี่ยม! คุณค้นพบพลังแห่งภาพพจน์แล้ว (+4 แต้ม +1 💎)';$('fm').style.color='#15803d'}
+else{st.bad++;sfx('no');$('fm').textContent='💡 ลองคิดอีกครั้งนะ! มาศึกษาความหมายไปด้วยกัน คำตอบคือ “'+q[1]+'”';$('fm').style.color='#1d4ed8'}
+$('fe').textContent=q[3];$('fb').style.display='block';hud();const ob=orbs.find(o=>o.k==cur.k);if(ob){if(ok)burst(ob.m.position,C[st.w].a);grp.remove(ob.m,ob.ring);orbs=orbs.filter(o=>o!==ob)}}
+$('nx').onclick=()=>{if([0,1,2,3].every(k=>st.ans[st.w*4+k]))finishWorld();else{mode='play';show(null);hud()}};
+function finishWorld(){const w=st.w,c=st.cw[w];st.cw[w]=c>=4?3:c>=2?2:1;st.score+=4;st.gems+=3;st.xp+=20;st.badges.push(BD[w]);addHat(w);st.un=Math.max(st.un,w+1);sfx('win');mode='wd';hud();
+$('wt').textContent='ผ่านด่าน '+WN[w]+'!';$('ws2').textContent='⭐'.repeat(st.cw[w])+'  ตอบถูก '+c+'/4 • โบนัส +4';$('wr').textContent='🏅 ตรา “'+BD[w]+'” • ของรางวัล '+AC[w];
+$('wn').textContent=w<4?'ไปด่านต่อไป ▶':'ดูผลสรุป 🏆';$('wn').onclick=()=>w<4?startWorld(w+1):results();show('wd')}
+function results(){mode='rs';const s=st.score,k=s>=90?['LEGENDARY MASTER – จอมปราชญ์แห่งภาพพจน์','👑']:s>=80?['LANGUAGE HERO – วีรบุรุษแห่งภาษา','🦸']:s>=70?['WORD EXPLORER – นักสำรวจแห่งภาษา','🧭']:s>=50?['RISING LEARNER – นักเรียนรู้ผู้กล้า','🌱']:['BEGINNER ADVENTURER – นักผจญภัยฝึกหัด','🎒'];const T=(Date.now()-st.t0)/1000|0;
+$('rk').textContent=k[1]+' '+k[0]+($('nick').value?' • '+$('nick').value.slice(0,14):'');$('rn').textContent=s+' / 100';
+$('rd').textContent='ถูก '+st.ok+' • ผิด '+st.bad+' • เวลา '+(T/60|0)+' นาที '+T%60+' วินาที • 💎 '+st.gems+' • XP '+st.xp;$('ra').textContent='ตรา: '+st.badges.join(', ')+(s<100?' — ลองเล่นอีกครั้งเพื่อทำคะแนนให้สูงขึ้น!':' — เต็ม 100 แต้ม สุดยอด!');sfx('win');show('rs')}
+const PAL={skin:[0xffe4d0,0xf1c27d,0xe0ac69,0xc68642,0x8d5524,0x5c3a21],hair:[0x3b2a14,0xf9a8d4,0xe9d5ff,0xffffff,0x6ee7b7,0x93c5fd],outfit:[0xfbcfe8,0x93c5fd,0x86efac,0xfcd34d,0xc4b5fd,0xfdba74],cape:[0xfda4af,0xc4b5fd,0x5eead4,0xfde68a,0x7dd3fc,0xf9a8d4],gem:[0xf472b6,0x7dd3fc,0xfde047,0x34d399,0xa78bfa,0xfb7185]};
+const LB={skin:'สีผิว',hair:'สีผม',outfit:'ชุด',cape:'ผ้าคลุม',gem:'คริสตัลคทา'};
+function openCh(){if(!ren){worlds();return}mode='cust';build(0);orbs.forEach(o=>grp.remove(o.m,o.ring));orbs=[];pl.position.set(0,0,0);show('ch');renderCh()}
+function renderCh(){const d=$('chp');d.innerHTML='<h2>สร้างตัวละครของคุณ</h2>';const row=(l,f)=>{const r=document.createElement('div');r.className='cr';r.innerHTML='<b>'+l+'</b>';f(r);d.appendChild(r)};
+row('ตัวละคร',r=>P.forEach(q=>{const b=document.createElement('button');b.textContent=q.n;b.onclick=()=>{Object.assign(CF,q);hero();renderCh()};r.appendChild(b)}));
+for(const k in PAL)row(LB[k],r=>PAL[k].forEach(c=>{const b=document.createElement('button');b.className='sw'+(CF[k]==c?' on':'');b.style.background='#'+c.toString(16).padStart(6,'0');b.setAttribute('aria-label',LB[k]);b.onclick=()=>{CF[k]=c;hero();renderCh()};r.appendChild(b)}));
+[['ทรงผม','st',['ทรงหนาม','ทรงมวย','ทรงยาว']],['อาวุธ','wp',['คทา','ดาบ','ธนู','ค้อน+โล่']],['ศีรษะ','hd',['ไม่มี','หมวกเขา','รัศมี','ฮู้ด','หูแมว','หูกระต่าย']]].forEach(([l,k,ns])=>row(l,r=>ns.forEach((n,i)=>{const b=document.createElement('button');b.textContent=n;if(CF[k]==i)b.className='on';b.onclick=()=>{CF[k]=i;hero();renderCh()};r.appendChild(b)})));
+row('',r=>{const b=document.createElement('button');b.textContent='ยืนยัน ▶ เลือกด่าน';b.onclick=()=>{mode='menu';worlds()};r.appendChild(b)})}
+$('rp').onclick=()=>{reset();mode='menu';worlds()};
+$('go').onclick=()=>{initAudio();reset();st.name=$('nick').value;openCh()};$('cb').onclick=openCh;
+$('hw').onclick=()=>show('how');$('lo').onclick=()=>show('learn');
+document.querySelectorAll('.bk').forEach(b=>b.onclick=()=>{mode='menu';show('menu')});
+$('pz').onclick=()=>{if(mode=='play'){mode='menu';worlds()}};
+/* controls */
+onkeydown=e=>{keys[e.key.length==1?e.key.toLowerCase():e.key]=true;if(e.key==' '&&mode=='play')e.preventDefault()};onkeyup=e=>{keys[e.key.length==1?e.key.toLowerCase():e.key]=false};
+const J=$('joy');function jm(e){const r=J.getBoundingClientRect(),x=(e.clientX-r.left-65)/45,y=(e.clientY-r.top-65)/45,l=Math.max(1,Math.hypot(x,y));joy={x:x/l,y:y/l};$('kn').style.transform='translate('+joy.x*40+'px,'+joy.y*40+'px)'}
+J.onpointerdown=e=>{J.setPointerCapture(e.pointerId);jm(e)};J.onpointermove=e=>{if(J.hasPointerCapture(e.pointerId))jm(e)};J.onpointerup=J.onpointercancel=()=>{joy={x:0,y:0};$('kn').style.transform=''};
+$('jb').onpointerdown=()=>{if(mode=='play'&&pl&&pl.position.y<=0)vy=8};
+init3D();
+if(!ren){const b=document.createElement('button');b.id='nxs';b.textContent='▶ ข้อถัดไป';b.onclick=()=>{for(let k=0;k<4;k++)if(!st.ans[st.w*4+k]){openQ(k);break}};$('hud').appendChild(b)}
+else{const x=document.createElement('i');x.id='nxs';document.body.appendChild(x)}
+</script></body></html>
